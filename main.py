@@ -1,7 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from database import get_db
+from database import engine
+from models import Base
+from models import URL
+
 app = FastAPI()
-db = {}
 
 def encode(num: int):
     chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -16,14 +22,20 @@ def encode(num: int):
     return string[::-1]
 
 @app.post("/shorten")
-def shorten(url: str):
-    code = encode(len(db) + 1)
-    db[code] = url
+def shorten(url: str, db: Session = Depends(get_db)):
+    new_url = URL(long_url=url)
+    db.add(new_url)
+    db.commit()
+    db.refresh(new_url)
+    code = encode(new_url.id)
+    new_url.short_code=code
+    db.commit()
     return {"short": code}
 
 @app.get("/{code}")
-def redirect(code: str):
-    url = db.get(code)
-    if not url:
+def redirect(code: str, db: Session = Depends(get_db)):
+    url_entry = db.query(URL).filter(URL.short_code == code).first()
+    if not url_entry:
         raise HTTPException(status_code=404, detail="Not Found")
-    return RedirectResponse(url)
+    return RedirectResponse(url_entry.long_url)
+
