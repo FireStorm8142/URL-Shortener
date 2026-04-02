@@ -1,0 +1,93 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Background */
+body {
+  background: #f5fbff;
+}
+
+/* Center container */
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card */
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  width: 380px;
+  box-shadow: 0 10px 30px rgba(0, 150, 255, 0.1);
+  text-align: center;
+}
+
+/* Title */
+.card h1 {
+  margin-bottom: 20px;
+  color: #1e90ff;
+}
+
+/* Inputs */
+.card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #d0e7ff;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.card input:focus {
+  border-color: #1e90ff;
+}
+
+/* Button */
+.card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card button:hover {
+  background: #187bcd;
+}
+
+/* Result section */
+.result {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.result a {
+  color: #1e90ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Copy button */
+.copy-btn {
+  background: white;
+  color: #1e90ff;
+  border: 1px solid #1e90ff;
+}
+
+.copy-btn:hover {
+  background: #e6f3ff;
+}
