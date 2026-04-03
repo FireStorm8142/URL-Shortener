@@ -39,12 +39,15 @@ body {
 
 .sidebar-item:hover{
   transform: translateY(-4px) scale(1.02);
-
 	background: white;
 	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-
 	color: #1e90ff;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-item.Active{
+  background: #1e90ff;
+	color: white;
+	box-shadow: 0 8px 20px rgba(30, 144, 255, 0.3);
 }
 
 #block{

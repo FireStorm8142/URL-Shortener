@@ -2,18 +2,19 @@ import { useState } from 'react';
 import './App.css';
 
 function App() {
-	const [url, setUrl] = useState("");
+	const [Active, setActive] = useState("shorten");
+	const [Url, setUrl] = useState("");
 	const [customCode, setCustomCode] = useState("");
 	const [shortUrl, setShortUrl] = useState("");
 
 	const handleSubmit = async () => {
-		const res = await fetch("http:127.0.0.1:8000/shorten", {
+		const res = await fetch("http://127.0.0.1:8000/shorten", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json"
 		},
 		body: JSON.stringify({
-			url: url,
+			url: Url,
 			custom_code: customCode || null,
 		}),
 		});
@@ -24,9 +25,9 @@ function App() {
 	function Sidebar(){
 		return(
 			<div className='sidebar-content'>
-				<div className="sidebar-item">🔗Shorten
+				<div className={`sidebar-item ${Active === "shorten" ? "Active" : ""}`} onClick={()=>setActive("shorten")}>🔗Shorten
 				</div>
-				<div className="sidebar-item">📊Stats
+				<div className={`sidebar-item ${Active === "stats" ? "Active" : ""}`} onClick={()=>setActive("stats")}>📊Stats
 				</div>
 			</div>
 		)
@@ -45,7 +46,7 @@ function App() {
 					<input
 						type="text"
 						placeholder="Enter your URL"
-						value={url}
+						value={Url}
 						onChange={(e) => setUrl(e.target.value)}
 					/>
 
