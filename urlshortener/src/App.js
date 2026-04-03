@@ -2,30 +2,48 @@ import { useState } from 'react';
 import './App.css';
 
 function App() {
+	const [Hover, setHover] = useState(false)
 	const [url, setUrl] = useState("");
 	const [customCode, setCustomCode] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
+	const [shortUrl, setShortUrl] = useState("");
 
-  const handleSubmit = async () => {
-    const res = await fetch("http:127.0.0.1:8000/shorten", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        url: url,
-        custom_code: customCode || null,
-      }),
-    });
-    const data = await res.json();
-    setShortUrl(`http://127.0.0.1:8000/${data.short}`)
-  };
+	const handleSubmit = async () => {
+		const res = await fetch("http:127.0.0.1:8000/shorten", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			url: url,
+			custom_code: customCode || null,
+		}),
+		});
+		const data = await res.json();
+		setShortUrl(`http://127.0.0.1:8000/${data.short}`)
+	};
 
-  return (
+	const handleHover = () => {
+
+	}
+
+	function Sidebar(){
+		return(
+			<div className='sidebar-content'>
+				<div id='Shorten'>shorten</div>
+				<div id='Stats'>Stats</div>
+			</div>
+		)
+	}
+
+	return (
     <div className="App">
+		<div className="sidebar">
+			<div id='block'></div>
+			<Sidebar></Sidebar>
+		</div>
 			<div className="container">
 				<div className="card">
-					<h1>URL Shortener</h1>
+					<h1>Paste Link Here</h1>
 
 					<input
 						type="text"
@@ -59,7 +77,7 @@ function App() {
 				</div>
 			</div>
     </div>
-  );
+  	);
 }
 
 export default App;
