@@ -2,7 +2,6 @@ import { useState } from 'react';
 import './App.css';
 
 function App() {
-	const [Hover, setHover] = useState(false)
 	const [url, setUrl] = useState("");
 	const [customCode, setCustomCode] = useState("");
 	const [shortUrl, setShortUrl] = useState("");
@@ -22,15 +21,13 @@ function App() {
 		setShortUrl(`http://127.0.0.1:8000/${data.short}`)
 	};
 
-	const handleHover = () => {
-
-	}
-
 	function Sidebar(){
 		return(
 			<div className='sidebar-content'>
-				<div id='Shorten'>shorten</div>
-				<div id='Stats'>Stats</div>
+				<div className="sidebar-item">🔗Shorten
+				</div>
+				<div className="sidebar-item">📊Stats
+				</div>
 			</div>
 		)
 	}
