@@ -16,7 +16,9 @@ body {
 }
 
 .sidebar{
-  flex-grow: .5;
+  flex: 0 0 20%;
+  min-width: 180px;
+  max-width: 280px;
   border: #1e90ff solid 2px;
 }
 
@@ -33,7 +35,6 @@ body {
 	color: #333;
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
             box-shadow 0.25s ease,
-            background 0.25s ease,
             color 0.2s ease;
 }
 
@@ -56,12 +57,11 @@ body {
 
 .sidebar-content{
   height: 95%;
-  border: black solid 2px;
 }
 
 /* Center container */
 .container {
-  flex-grow: 3;
+  flex: 1;
   height: 100vh;
   display: flex;
   justify-content: center;

@@ -25,12 +25,10 @@ class URLRequest(BaseModel):
 def encode(num: int):
     chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     string=""
-    
-    if num==0: return "a"
 
     while num>0:
         rem=num%62
-        string=string+(chars[rem])
+        string=string+(chars[rem-1])
         num=num//62
     return string[::-1]
 
@@ -78,3 +76,22 @@ def redirect(code: str, request: Request, db: Session = Depends(get_db)):
     db.add(event)
     db.commit()
     return RedirectResponse(url_entry.long_url)
+
+@app.get("/stats/{code}")
+def stats(code: str, db: Session = Depends(get_db)):
+    url_entry = db.query(URL).filter(URL.short_code==code).first()
+    if not url_entry:
+        raise HTTPException(status_code=404, detail="Not Found")
+    clicks = db.query(ClickTracker).filter(ClickTracker.url_id==url_entry.id).all()
+    return{
+        "total_clicks": url_entry.clicks,
+        "events": [
+            {
+                "timestamp": c.timestamp,
+                "ip": c.ip,
+                "referrer": c.referrer,
+                "user_agent": c.user_agent
+            }
+            for c in clicks
+        ]
+    }

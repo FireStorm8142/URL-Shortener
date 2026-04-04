@@ -33,6 +33,48 @@ function App() {
 		)
 	}
 
+	function Shorten(){
+		return(
+			<div className="card">
+						<h1>Paste Link Here</h1>
+
+						<input
+							type="text"
+							placeholder="Enter your URL"
+							value={Url}
+							onChange={(e) => setUrl(e.target.value)}
+						/>
+
+						<input
+							type="text"
+							placeholder="Custom code (optional)"
+							value={customCode}
+							onChange={(e) => setCustomCode(e.target.value)}
+						/>
+
+						<button onClick={handleSubmit}>Shorten</button>
+
+						{shortUrl && (
+							<div className="result">
+								<a href={shortUrl} target="_blank" rel="noreferrer">
+									{shortUrl}
+								</a>
+								<button
+									className="copy-btn"
+									onClick={() => navigator.clipboard.writeText(shortUrl)}
+								>
+									Copy
+								</button>
+							</div>
+						)}
+			</div>
+		)
+	}
+
+	function Stats(){
+		return
+	}
+
 	return (
     <div className="App">
 		<div className="sidebar">
@@ -40,39 +82,8 @@ function App() {
 			<Sidebar></Sidebar>
 		</div>
 			<div className="container">
-				<div className="card">
-					<h1>Paste Link Here</h1>
-
-					<input
-						type="text"
-						placeholder="Enter your URL"
-						value={Url}
-						onChange={(e) => setUrl(e.target.value)}
-					/>
-
-					<input
-						type="text"
-						placeholder="Custom code (optional)"
-						value={customCode}
-						onChange={(e) => setCustomCode(e.target.value)}
-					/>
-
-					<button onClick={handleSubmit}>Shorten</button>
-
-					{shortUrl && (
-						<div className="result">
-							<a href={shortUrl} target="_blank" rel="noreferrer">
-								{shortUrl}
-							</a>
-							<button
-								className="copy-btn"
-								onClick={() => navigator.clipboard.writeText(shortUrl)}
-							>
-								Copy
-							</button>
-						</div>
-					)}
-				</div>
+				{Active === "shorten" && <Shorten></Shorten>}
+				{Active === "stats" && <Stats></Stats>}
 			</div>
     </div>
   	);
