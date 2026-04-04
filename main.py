@@ -1,17 +1,26 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from database import get_db
-from models import URL
-from pydantic import BaseModel, HttpUrl
+from database import get_db, Base, engine
+from models import URL, ClickTracker
+from datetime import datetime, timezone
+from pydantic import BaseModel, HttpUrl, Field
 from typing import Optional
 
 app = FastAPI()
 
 class URLRequest(BaseModel):
     url: HttpUrl
-    custom_code: Optional[str] = None
+    custom_code: Optional[str] = Field(default=None, example=None)
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "url": "https://example.com/",
+                "custom_code": None
+            }
+        }
 
 def encode(num: int):
     chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -54,9 +63,18 @@ def shorten(request: URLRequest, db: Session = Depends(get_db)):
     return {"short": code}
 
 @app.get("/{code}")
-def redirect(code: str, db: Session = Depends(get_db)):
+def redirect(code: str, request: Request, db: Session = Depends(get_db)):
     url_entry = db.query(URL).filter(URL.short_code == code).first()
     if not url_entry:
         raise HTTPException(status_code=404, detail="Not Found")
+    url_entry.clicks += 1
+    event = ClickTracker(
+        url_id = url_entry.id,
+        timestamp = datetime.now(timezone.utc),
+        referrer = request.headers.get("referer"),
+        user_agent = request.headers.get("user-agent"),
+        ip=request.client.host
+    )
+    db.add(event)
+    db.commit()
     return RedirectResponse(url_entry.long_url)
-
