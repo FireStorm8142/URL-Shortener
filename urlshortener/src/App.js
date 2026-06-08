@@ -6,6 +6,7 @@ function App() {
 	const [Url, setUrl] = useState("");
 	const [customCode, setCustomCode] = useState("");
 	const [shortUrl, setShortUrl] = useState("");
+	const [statsData, setStatsData] = useState("");
 
 	const handleSubmit = async () => {
 		const res = await fetch("http://127.0.0.1:8000/shorten", {
@@ -22,12 +23,23 @@ function App() {
 		setShortUrl(`http://127.0.0.1:8000/${data.short}`)
 	};
 
+	const handleStats = (code) => async () => {
+		const res = await fetch (`http://127.0.0.1:8000/stats/${code}`);
+		const data = await res.json();
+		setStatsData(data);
+	}
+
 	function Sidebar(){
 		return(
 			<div className='sidebar-content'>
 				<div className={`sidebar-item ${Active === "shorten" ? "Active" : ""}`} onClick={()=>setActive("shorten")}>🔗Shorten
 				</div>
-				<div className={`sidebar-item ${Active === "stats" ? "Active" : ""}`} onClick={()=>setActive("stats")}>📊Stats
+				<div className={`sidebar-item ${Active === "stats" ? "Active" : ""}`} onClick={()=>{setActive("stats");
+				if (shortUrl) {
+					const code = shortUrl.split("/").pop()
+					handleStats(code);
+					}
+				}}>📊Stats
 				</div>
 			</div>
 		)
@@ -43,6 +55,7 @@ function App() {
 							placeholder="Enter your URL"
 							value={Url}
 							onChange={(e) => setUrl(e.target.value)}
+							required
 						/>
 
 						<input
@@ -72,7 +85,30 @@ function App() {
 	}
 
 	function Stats(){
-		return
+		return(
+			<div className='stats-page'>
+				<div className='dashboard'>
+					<h1 className='totalclicks'>{statsData?.total_clicks || 0}</h1>
+				</div>
+				<div className='stats'>
+					{statsData?.events?.map((event, index) => (
+					<div className='stat-row' key={index}>
+
+						<div className='stat-main'>
+							<span className='ip'>{event.ip}</span>
+
+							<span className='meta'>
+								{event.referrer || "Direct"}
+							</span>
+						</div>
+						<span className='time'>
+							{event.timestamp}
+						</span>
+					</div>
+				))}
+				</div>
+			</div>
+		)
 	}
 
 	return (
