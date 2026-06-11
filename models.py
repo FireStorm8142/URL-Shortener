@@ -9,6 +9,7 @@ class URL(Base):
     long_url = Column(String, nullable=False)
     short_code = Column(String, unique=True, index=True)
     clicks = Column(Integer, default=0)
+    created = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 class ClickTracker(Base):
     __tablename__ = "click_events"

@@ -47,7 +47,7 @@ def shorten(request: URLRequest, db: Session = Depends(get_db)):
         db.add(new_url)
         db.commit()
 
-        return {"short": request.custom_code}
+        return {"short": request.custom_code, "status": "OK"}
 
     new_url = URL(long_url=str(request.url))
     db.add(new_url)
@@ -58,7 +58,7 @@ def shorten(request: URLRequest, db: Session = Depends(get_db)):
     new_url.short_code = code
     db.commit()
 
-    return {"short": code}
+    return {"short": code, "status": "OK"}
 
 @app.get("/{code}")
 def redirect(code: str, request: Request, db: Session = Depends(get_db)):

@@ -132,8 +132,47 @@ body {
   background: #e6f3ff;
 }
 
+.stats-container{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stats-search{
+    width: 95%;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stats-search input{
+    flex: 1;
+    padding: 14px 18px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(16px);
+    font-size: 1rem;
+    color: #334155;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.stats-search button{
+    padding: 14px 24px;
+    border: none;
+    border-radius: 14px;
+    background: #1e90ff;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
 .dashboard{
-  width: 90%;
+  width: 100%;
   max-width: 900px;
   height: 420px;
   padding: 28px;
@@ -153,7 +192,7 @@ body {
 }
 
 .stats{
-  width: min(900px, 90%);
+  width: 100%;
   height: 420px;
   padding: 20px;
   border-radius: 24px;
@@ -170,10 +209,78 @@ body {
   gap: 14px;
 }
 
+.info{
+  display: flex;
+  gap: 24px;
+}
+
+#summary{
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 16px;
+  border-bottom: 2px solid gray;
+  padding-bottom: 8px;
+}
+
+.summarysection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.summaryrow{
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.detailed-stats{
+  flex: 2;
+  height: 420px;
+  padding: 28px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.12);
+}
+
+#info{
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 16%;
+  border-bottom: 2px solid gray;
+  padding-bottom: 8px;
+}
+
+.inforow{
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
 .stats-page{
   width: 95%;
   height: 75%;
-
   display: flex;
+  flex-direction: column;
   gap: 24px;
+}
+
+#stats-header{
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 16px;
+  border-bottom: 2px solid gray;
+  padding-bottom: 8px;
 }
