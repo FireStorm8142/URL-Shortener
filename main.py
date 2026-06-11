@@ -85,6 +85,8 @@ def stats(code: str, db: Session = Depends(get_db)):
     clicks = db.query(ClickTracker).filter(ClickTracker.url_id==url_entry.id).all()
     return{
         "total_clicks": url_entry.clicks,
+        "original_url": url_entry.long_url,
+        "created": url_entry.created,
         "events": [
             {
                 "timestamp": c.timestamp,

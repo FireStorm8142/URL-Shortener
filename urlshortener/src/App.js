@@ -51,9 +51,9 @@ function Shorten({ Url, setUrl, customCode, setCustomCode, shortUrl, setShortUrl
 	)
 }
 
-function Stats({ statsCode, setStatsCode, statsData, handleStats }) {
+function Stats({ statsCode, shortUrl, setStatsCode, statsData, handleStats }) {
 	const uniqueVisitors = new Set(statsData?.events?.map(event => event.ip)).size;
-	const lastClick = statsData?.events?.[0].timestamp || "No Clicks Yet";
+	const lastClick = statsData?.events?.[0].timestamp || "N/A";
 	return(
 		<div className='stats-container'>
 			<div className='stats-search'>
@@ -72,9 +72,9 @@ function Stats({ statsCode, setStatsCode, statsData, handleStats }) {
 					</div>
 					<div className='detailed-stats'> 
 						<div id='info'>Info</div>
-						<div className='inforow'>Original URL: </div>
-						<div className='inforow'>Short URL: </div>
-						<div className='inforow'>Created On: </div>
+						<div className='inforow'>Original URL: {statsData?.original_url || "N/A"}</div>
+						<div className='inforow'>Short URL: {shortUrl? shortUrl : "N/A"}</div>
+						<div className='inforow'>Created On: {statsData?.created || "N/A"}</div>
 					</div>
 				</div>
 				<div className='stats'>
@@ -129,10 +129,10 @@ function App() {
 			<div id='block'></div>
 			<Sidebar Active={Active} setActive={setActive} shortUrl={shortUrl} handleStats={handleStats} />
 		</div>
-			<div className="container">
-				{Active === "shorten" && <Shorten Url={Url} setUrl={setUrl} customCode={customCode} setCustomCode={setCustomCode} shortUrl={shortUrl} setShortUrl={setShortUrl} handleSubmit={handleSubmit} />}
-				{Active === "stats" && <Stats statsCode={statsCode} setStatsCode={setStatsCode} statsData={statsData} handleStats={handleStats} />}
-			</div>
+		<div className="container">
+			{Active === "shorten" && <Shorten Url={Url} setUrl={setUrl} customCode={customCode} setCustomCode={setCustomCode} shortUrl={shortUrl} setShortUrl={setShortUrl} handleSubmit={handleSubmit} />}
+			{Active === "stats" && <Stats statsCode={statsCode} shortUrl={shortUrl} setStatsCode={setStatsCode} statsData={statsData} handleStats={handleStats} />}
+		</div>
     </div>
   	);
 }
