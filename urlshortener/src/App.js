@@ -91,6 +91,11 @@ function Stats({ statsCode, shortUrl, setStatsCode, statsData, handleStats }) {
 				</div>
 				<div className='stats'>
 					<div id = 'stats-header'>Click Events</div>
+					<div className="stats-header">
+						<span>IP Address</span>
+						<span>Referrer</span>
+						<span>Time</span>
+					</div> 
 					{statsData?.events?.map((event, index) => (
 					<div className='stat-row' key={index}>
 						<span className='ip'>{event.ip}</span>
@@ -113,18 +118,22 @@ function App() {
 	const [statsData, setStatsData] = useState("");
 
 	const handleSubmit = async () => {
-		const res = await fetch("http://127.0.0.1:8000/shorten", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			url: Url,
-			custom_code: customCode || null,
-		}),
-		});
-		const data = await res.json();
-		setShortUrl(`http://127.0.0.1:8000/${data.short}`)
+		try {
+			const res = await fetch("http://127.0.0.1:8000/shorten", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				url: Url,
+				custom_code: customCode || null,
+			}),
+			});
+			const data = await res.json();
+			setShortUrl(`http://127.0.0.1:8000/${data.short}`)
+		} catch (error) {
+
+		}
 	};
 
 	const handleStats = (code) => async () => {

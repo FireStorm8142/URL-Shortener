@@ -36,9 +36,8 @@ def encode(num: int):
     string=""
 
     while num>0:
-        rem=num%62
-        string=string+(chars[rem-1])
-        num=num//62
+        num, rem = divmod(num, 62)
+        string += chars[rem]
     return string[::-1]
 
 @app.post("/shorten")
@@ -48,6 +47,8 @@ def shorten(request: URLRequest, db: Session = Depends(get_db)):
         existing = db.query(URL).filter(URL.short_code == request.custom_code).first()
         if existing:
             raise HTTPException(status_code=400, detail="Code already taken")
+        if request.custom_code.isalnum() == False:
+            raise HTTPException(status_code=400, detail="Custom code must contain only letters and numbers")
 
         new_url = URL(
             long_url=str(request.url),
