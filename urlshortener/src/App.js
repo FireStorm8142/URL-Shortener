@@ -53,7 +53,17 @@ function Shorten({ Url, setUrl, customCode, setCustomCode, shortUrl, setShortUrl
 
 function Stats({ statsCode, shortUrl, setStatsCode, statsData, handleStats }) {
 	const uniqueVisitors = new Set(statsData?.events?.map(event => event.ip)).size;
-	const lastClick = statsData?.events?.[0].timestamp || "N/A";
+	const formatTime = (timestamp) => {
+		return new Date(timestamp).toLocaleString("en-US", {
+			day: "numeric",
+			month: "short",
+			year: "numeric",
+			hour: "numeric",
+			minute: "2-digit",
+			hour12: false
+		});
+	};
+	const lastClick = statsData?.events?.at(-1)?.timestamp ? formatTime(statsData.events.at(-1).timestamp) : "N/A";
 	return(
 		<div className='stats-container'>
 			<div className='stats-search'>
@@ -70,11 +80,13 @@ function Stats({ statsCode, shortUrl, setStatsCode, statsData, handleStats }) {
 							<h1 className='summaryrow'>Last Click: {lastClick}</h1>
 						</div>
 					</div>
-					<div className='detailed-stats'> 
+					<div className='details'> 
 						<div id='info'>Info</div>
-						<div className='inforow'>Original URL: {statsData?.original_url || "N/A"}</div>
-						<div className='inforow'>Short URL: {shortUrl? shortUrl : "N/A"}</div>
-						<div className='inforow'>Created On: {statsData?.created || "N/A"}</div>
+						<div className='infosection'>
+							<div className='inforow'>Original URL: {statsData?.original_url || "N/A"}</div>
+							<div className='inforow'>Short URL: {statsData?.short_url || "N/A"}</div>
+							<div className='inforow'>Created On: {statsData?.created ? formatTime(statsData.created) : "N/A"}</div>
+						</div>
 					</div>
 				</div>
 				<div className='stats'>
@@ -82,10 +94,8 @@ function Stats({ statsCode, shortUrl, setStatsCode, statsData, handleStats }) {
 					{statsData?.events?.map((event, index) => (
 					<div className='stat-row' key={index}>
 						<span className='ip'>{event.ip}</span>
-
 						<span className='meta'>{event.referrer || "Direct"}</span>
-
-						<span className='time'>{event.timestamp}</span>
+						<span className='time'>{formatTime(event.timestamp)}</span>
 					</div>
 				))}
 				</div>

@@ -11,6 +11,7 @@ body {
 
 .App{
   display: flex;
+  min-height: 100vh;
 }
 
 .sidebar{
@@ -59,7 +60,7 @@ body {
 
 .container {
   flex: 1;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,8 +135,11 @@ body {
 
 .stats-container{
     width: 95%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 40px;
     gap: 24px;
 }
 
@@ -149,7 +153,7 @@ body {
 .stats-search input{
     flex: 1;
     padding: 14px 18px;
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 2px solid gray;
     border-radius: 14px;
     background: rgba(255,255,255,0.18);
     backdrop-filter: blur(16px);
@@ -236,9 +240,10 @@ body {
   font-weight: 500;
   color: #334155;
   line-height: 1.6;
+  margin-top: 12px;
 }
 
-.detailed-stats{
+.details{
   flex: 2;
   height: 420px;
   padding: 28px;
@@ -249,15 +254,25 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow:
     0 8px 32px rgba(31, 38, 135, 0.12);
+  display: flex;
+  flex-direction: column;
 }
 
 #info{
   font-size: 1.3rem;
   font-weight: 600;
   color: #4a5568;
-  margin-bottom: 16%;
+  margin-bottom: 16px;
   border-bottom: 2px solid gray;
   padding-bottom: 8px;
+}
+
+.infosection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  flex: 1;
 }
 
 .inforow{
@@ -283,4 +298,40 @@ body {
   margin-bottom: 16px;
   border-bottom: 2px solid gray;
   padding-bottom: 8px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1.5fr;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 14px;
+  padding: 14px 18px;
+  color: #334155;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease;
+}
+
+.stat-row:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.65);
+}
+
+.ip {
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.meta {
+  color: #475569;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time {
+  text-align: right;
+  color: #64748b;
+  font-size: 0.85rem;
 }
