@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from database import get_db, Base, engine
@@ -9,7 +10,15 @@ from pydantic import BaseModel, HttpUrl, Field
 from typing import Optional
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+Base.metadata.create_all(bind=engine)
 class URLRequest(BaseModel):
     url: HttpUrl
     custom_code: Optional[str] = Field(default=None, example=None)
@@ -42,14 +51,15 @@ def shorten(request: URLRequest, db: Session = Depends(get_db)):
 
         new_url = URL(
             long_url=str(request.url),
-            short_code=request.custom_code
+            short_code=request.custom_code,
+            created=datetime.now(timezone.utc)
         )
         db.add(new_url)
         db.commit()
 
         return {"short": request.custom_code, "status": "OK"}
 
-    new_url = URL(long_url=str(request.url))
+    new_url = URL(long_url=str(request.url), created=datetime.now(timezone.utc))
     db.add(new_url)
     db.commit()
     db.refresh(new_url)
@@ -86,6 +96,7 @@ def stats(code: str, db: Session = Depends(get_db)):
     return{
         "total_clicks": url_entry.clicks,
         "original_url": url_entry.long_url,
+        "short_url": "http://localhost:8000/"+url_entry.short_code,
         "created": url_entry.created,
         "events": [
             {
