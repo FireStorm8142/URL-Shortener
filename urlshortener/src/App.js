@@ -17,7 +17,7 @@ function Sidebar({ Active, setActive, shortUrl, handleStats }) {
 	)
 }
 
-function Shorten({ Url, setUrl, customCode, setCustomCode, shortUrl, setShortUrl, handleSubmit }) {
+function Shorten({ Url, setUrl, customCode, setCustomCode, shortUrl, handleSubmit, error}) {
 	return(
 		<div className="card">
 			<h1>Paste Link Here</h1>
@@ -47,6 +47,7 @@ function Shorten({ Url, setUrl, customCode, setCustomCode, shortUrl, setShortUrl
 					</button>
 				</div>
 			)}
+			{error && <div className="error">{error}</div>}
 		</div>
 	)
 }
@@ -116,10 +117,13 @@ function App() {
 	const [statsCode, setStatsCode] = useState("");
 	const [shortUrl, setShortUrl] = useState("");
 	const [statsData, setStatsData] = useState("");
+	const [error, setError] = useState("");
 
 	const handleSubmit = async () => {
+		setError("");
+		setShortUrl("");
 		try {
-			const res = await fetch("http://127.0.0.1:8000/shorten", {
+			const res = await fetch((`${process.env.REACT_APP_API_URL}/shorten`), {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -130,16 +134,31 @@ function App() {
 			}),
 			});
 			const data = await res.json();
+			if (res.status === 422){
+				throw new Error("Invalid URL Format, Enter a valid URL");
+			}
+			if (!res.ok){
+				throw new Error(data.detail);
+			}
 			setShortUrl(`http://127.0.0.1:8000/${data.short}`)
 		} catch (error) {
-
+			setError(error.message);
 		}
 	};
 
 	const handleStats = (code) => async () => {
-		const res = await fetch (`http://127.0.0.1:8000/stats/${code}`);
-		const data = await res.json();
-		setStatsData(data);
+		setError("");
+		setStatsData("");
+		try{
+			const res = await fetch (`http://127.0.0.1:8000/stats/${code}`);
+			const data = await res.json();
+			if (!res.ok){
+				throw new Error(data.detail);
+			}
+			setStatsData(data);
+		} catch (error) {
+			setError(error.message);
+		}
 	}
 
 	return (
@@ -149,7 +168,7 @@ function App() {
 			<Sidebar Active={Active} setActive={setActive} shortUrl={shortUrl} handleStats={handleStats} />
 		</div>
 		<div className="container">
-			{Active === "shorten" && <Shorten Url={Url} setUrl={setUrl} customCode={customCode} setCustomCode={setCustomCode} shortUrl={shortUrl} setShortUrl={setShortUrl} handleSubmit={handleSubmit} />}
+			{Active === "shorten" && <Shorten Url={Url} setUrl={setUrl} customCode={customCode} setCustomCode={setCustomCode} shortUrl={shortUrl} handleSubmit={handleSubmit} error={error} />}
 			{Active === "stats" && <Stats statsCode={statsCode} shortUrl={shortUrl} setStatsCode={setStatsCode} statsData={statsData} handleStats={handleStats} />}
 		</div>
     </div>

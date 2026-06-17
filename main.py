@@ -8,11 +8,15 @@ from models import URL, ClickTracker
 from datetime import datetime, timezone
 from pydantic import BaseModel, HttpUrl, Field
 from typing import Optional
+import os
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        os.getenv("FRONTENT_URL"),
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -92,7 +96,7 @@ def redirect(code: str, request: Request, db: Session = Depends(get_db)):
 def stats(code: str, db: Session = Depends(get_db)):
     url_entry = db.query(URL).filter(URL.short_code==code).first()
     if not url_entry:
-        raise HTTPException(status_code=404, detail="Not Found")
+        raise HTTPException(status_code=404, detail="Code Not Found")
     clicks = db.query(ClickTracker).filter(ClickTracker.url_id==url_entry.id).all()
     return{
         "total_clicks": url_entry.clicks,

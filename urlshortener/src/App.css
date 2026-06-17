@@ -344,3 +344,13 @@ body {
   color: #64748b;
   font-size: 0.85rem;
 }
+
+.error {
+    margin-top: 12px;
+    padding: 10px;
+    background: #ffe6e6;
+    color: #d8000c;
+    border-radius: 8px;
+    border: 1px solid #ffb3b3;
+    font-size: 0.9rem;
+}
