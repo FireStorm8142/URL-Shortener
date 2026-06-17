@@ -52,7 +52,7 @@ function Shorten({ Url, setUrl, customCode, setCustomCode, shortUrl, handleSubmi
 	)
 }
 
-function Stats({ statsCode, shortUrl, setStatsCode, statsData, handleStats }) {
+function Stats({ statsCode, setStatsCode, statsData, handleStats }) {
 	const uniqueVisitors = new Set(statsData?.events?.map(event => event.ip)).size;
 	const formatTime = (timestamp) => {
 		return new Date(timestamp).toLocaleString("en-US", {
@@ -140,7 +140,7 @@ function App() {
 			if (!res.ok){
 				throw new Error(data.detail);
 			}
-			setShortUrl(`http://127.0.0.1:8000/${data.short}`)
+			setShortUrl(`${process.env.REACT_APP_API_URL}/${data.short}`)
 		} catch (error) {
 			setError(error.message);
 		}
@@ -150,7 +150,7 @@ function App() {
 		setError("");
 		setStatsData("");
 		try{
-			const res = await fetch (`http://127.0.0.1:8000/stats/${code}`);
+			const res = await fetch (`${process.env.REACT_APP_API_URL}/stats/${code}`);
 			const data = await res.json();
 			if (!res.ok){
 				throw new Error(data.detail);
@@ -169,7 +169,7 @@ function App() {
 		</div>
 		<div className="container">
 			{Active === "shorten" && <Shorten Url={Url} setUrl={setUrl} customCode={customCode} setCustomCode={setCustomCode} shortUrl={shortUrl} handleSubmit={handleSubmit} error={error} />}
-			{Active === "stats" && <Stats statsCode={statsCode} shortUrl={shortUrl} setStatsCode={setStatsCode} statsData={statsData} handleStats={handleStats} />}
+			{Active === "stats" && <Stats statsCode={statsCode} setStatsCode={setStatsCode} statsData={statsData} handleStats={handleStats} />}
 		</div>
     </div>
   	);
