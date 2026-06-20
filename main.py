@@ -77,6 +77,8 @@ def shorten(request: URLRequest, db: Session = Depends(get_db)):
 
 @app.get("/{code}")
 def redirect(code: str, request: Request, db: Session = Depends(get_db)):
+    for key, value in request.headers.items():
+        print(f"{key}: {value}")
     url_entry = db.query(URL).filter(URL.short_code == code).first()
     if not url_entry:
         raise HTTPException(status_code=404, detail="Not Found")
@@ -101,7 +103,7 @@ def stats(code: str, db: Session = Depends(get_db)):
     return{
         "total_clicks": url_entry.clicks,
         "original_url": url_entry.long_url,
-        "short_url": "http://localhost:8000/"+url_entry.short_code,
+        "short_url": os.getenv("REACT_APP_API_URL")+url_entry.short_code,
         "created": url_entry.created,
         "events": [
             {
