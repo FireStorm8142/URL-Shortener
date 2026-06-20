@@ -86,7 +86,7 @@ def redirect(code: str, request: Request, db: Session = Depends(get_db)):
         timestamp = datetime.now(timezone.utc),
         referrer = request.headers.get("referer"),
         user_agent = request.headers.get("user-agent"),
-        ip=request.client.host
+        ip = request.headers.get("x-real-ip", request.client.host)
     )
     db.add(event)
     db.commit()
@@ -101,7 +101,7 @@ def stats(code: str, db: Session = Depends(get_db)):
     return{
         "total_clicks": url_entry.clicks,
         "original_url": url_entry.long_url,
-        "short_url": "http://localhost:8000/"+url_entry.short_code,
+        "short_url": os.getenv("REACT_APP_API_URL")+"/"+url_entry.short_code,
         "created": url_entry.created,
         "events": [
             {
